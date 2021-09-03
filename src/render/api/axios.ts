@@ -1,49 +1,47 @@
-import axios from 'axios';
-import store from '../render/store';
-import { getStorage, deleteStorage } from '../render/lib/store';
-const instance = axios.create({
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+// import store from '../render/store';
+// import { getStorage, deleteStorage } from '../render/lib/store';
+const serve = axios.create({
     baseURL: 'http://localhost:4000',
     withCredentials: true,
     responseType: 'json'
 });
 // 添加请求拦截器
 
-instance.interceptors.request.use(
-    function (config) {
+serve.interceptors.request.use(
+    (config: AxiosRequestConfig) => {
         return config;
     },
-    function (error) {
-        return Promise.reject(error);
+    error => {
+        return Promise.resolve(error);
     }
 );
 // 添加响应拦截器
-instance.interceptors.response.use(
-    function (response) {
-        // 对响应数据做点什么
+serve.interceptors.response.use(
+    (response: AxiosResponse) => {
         return response;
     },
-    function (error) {
+    error => {
         // 对响应错误做点什么
         // 需要登录
         if (error.response.status === 301) {
-            if (getStorage('userInfo')) {
-                deleteStorage('userInfo');
-                deleteStorage('likeSongSheet');
-                store.commit('SET_USER_INFO', {});
-                store.commit('GET_USER_SONG_SHEET', []);
-            }
+            // if (getStorage('userInfo')) {
+            //     deleteStorage('userInfo');
+            //     deleteStorage('likeSongSheet');
+            //     store.commit('SET_USER_INFO', {});
+            //     store.commit('GET_USER_SONG_SHEET', []);
+            // }
         }
         return Promise.reject(error);
     }
 );
-
 export default {
     get(obj) {
         return Promise.resolve(
-            instance({
-                method: 'GET',
+            serve({
                 url: obj.url,
-                params: obj.data
+                method: 'GET',
+                oatams: obj.data
             }).catch(err => {
                 return err.response;
             })
@@ -51,11 +49,11 @@ export default {
     },
     post(obj) {
         return Promise.resolve(
-            instance({
+            serve({
                 method: 'POST',
                 url: obj.url,
                 responseType: 'json',
-                params: obj.data
+                oatams: obj.data
             }).catch(err => {
                 return err.response;
             })
