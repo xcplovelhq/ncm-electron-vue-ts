@@ -1,6 +1,5 @@
 <template>
-    <div>
-        22
+    <div class="find">
         <router-view></router-view>
     </div>
 </template>
@@ -9,4 +8,8 @@
 export default {};
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.find {
+    flex: 1;
+}
+</style>

@@ -30,17 +30,17 @@
  * 返回
  * @returns emit        组件暴露出去的方法
  */
-import { defineComponent, ref, reactive } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, ref } from 'vue';
+import getBannerList from './composables/getBannerList';
+// import { useStore } from 'vuex';
 export default defineComponent({
     setup() {
         const visible = ref(false);
-        const bannerList = reactive([]);
-        const songSheetList = reactive([]);
-        const newSongList = reactive([]);
-        const videoList = reactive([]);
-        const djList = reactive([]);
-        const columnList = reactive([
+        const songSheetList = ref([]);
+        const newSongList = ref([]);
+        const videoList = ref([]);
+        const djList = ref([]);
+        const columnList = ref([
             {
                 id: 1,
                 title: '推荐歌单',
@@ -60,13 +60,19 @@ export default defineComponent({
                 to: { name: 'mv' }
             }
         ]);
-        function getBanner() {
-            this.$api.findData.getBanner().then(({ data }) => {
-                this.bannerList = data.banners;
-            });
-        },
+        const bannerList = getBannerList();
+        // const getBanner = () => {
+        //     api.getBanner().then(({ data }) => {
+        //         bannerList.value = data.banners;
+        //     });
+        // };
+        // getBanner();
+        // console.log(bannerList, 111111);
 
-        return {};
+        // this.bannerList = data.banners;
+        return {
+            bannerList
+        };
     }
 });
 </script>
